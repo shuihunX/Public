@@ -202,6 +202,7 @@
 								:options="typeArray"
 								size="mini"
 								:show-all-levels="false"
+								popper-class="pc-sel-area-cascader"
 							></el-cascader>
 						</span>
 
@@ -342,12 +343,7 @@
 								show-overflow-tooltip
 							>
 								<template slot-scope="scope">
-									<p v-if="scope.row.user.indexOf('证书') != -1">
-										{{ scope.row.user.split("证书")[0] }}
-									</p>
-									<p v-else>
-										{{ scope.row.user }}
-									</p>
+									{{ formatDialogUser(scope.row.user) }}
 								</template>
 							</el-table-column>
 
@@ -1094,6 +1090,14 @@ export default {
 			return (this.page - 1) * 10 + index + 1
 		},
 
+		// 弹窗1，处理操作人员，去掉证书之后的字段
+		formatDialogUser(user) {
+			if (user.indexOf("证书") !== -1) {
+				return user.split("证书")[0]
+			}
+			return user
+		},
+
 		/* 弹窗2，点击弹窗1的详情============================================================= */
 		detailsDialog2(row) {
 			console.log("[ row ]-点击详情", row, row.id)
@@ -1125,6 +1129,8 @@ export default {
 
 <style lang="scss" scoped>
 // scoped
+// 单独引入src/assets/styles/elCascader.scss，级联选择器el-cascader，样式修改
+@import "@/assets/styles/elCascader.scss";
 ::v-deep .el-select {
 	width: 181px;
 	.el-input {
@@ -1159,9 +1165,6 @@ export default {
 		color: #0000ff;
 	}
 }
-
-// 修改 级联选择器el-cascader的样式
-
 .siteDetail {
 	padding: 60px 32px 0 32px;
 	background: url(@/assets/images/page-bg.jpg);
